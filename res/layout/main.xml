@@ -19,13 +19,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-    <ListView android:id="@+id/in"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:stackFromBottom="true"
-        android:transcriptMode="alwaysScroll"
-        android:layout_weight="3"
-    />
     
 <Gallery xmlns:android="http://schemas.android.com/apk/res/android" 
     android:id="@+id/gallerys"

@@ -5,12 +5,12 @@
   android:layout_height="fill_parent" android:orientation="vertical">
 
 <Gallery xmlns:android="http://schemas.android.com/apk/res/android" 
-    android:id="@+id/gallerys"
+    android:id="@+id/gallery2s"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
 />
 <ImageButton
-		android:id="@+id/sendI"  
+		android:id="@+id/sendIs"  
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_gravity="left"
