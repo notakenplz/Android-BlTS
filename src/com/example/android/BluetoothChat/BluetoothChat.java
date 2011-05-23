@@ -93,7 +93,7 @@ public class BluetoothChat extends Activity {
     private byte[] F_SIZE = new byte[3];
     
     //hardcoded path to image file
-    private String file_name = "/mnt/sdcard/GIF/p1.gif";
+    private String file_name = "/mnt/sdcard/GIF/b5.bmp";
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -193,74 +193,101 @@ public class BluetoothChat extends Activity {
 		int packetsize = 20;
         byte tp;
 
-		byte[] imag = new byte[packetsize];
+		//byte[] imag = new byte[packetsize];
 		
-    	while(filesize >= 0)
-    	{
-    		marker = 0;
-    		if (filesize >= packetsize)
-    		{
-    			
-    			for (int i = 0; i < packetsize; i++)
-    			{
-    				try {
-						tp = dis.readByte();
-						imag[marker] = tp;
-						marker++;
-	    				filesize--;	
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+        byte[] img = new byte[filesize];
+        
+		for (int i = 0; i < filesize; i++)
+		{
+			try {
+				tp = dis.readByte();
 
-    			}
+				img[marker] = tp;
+				marker++;
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.exit(0);
+			}
+		}
+		
+		if (img.length > 0) {
+        //send file
+        mChatService.write(img);
 
-    	            mChatService.write(imag);
+        Log.d(TAG, "6");
+        // Reset out string buffer to zero and clear the edit text field
+        mOutStringBuffer.setLength(0);
+        mOutEditText.setText(mOutStringBuffer);
+    }
 
-        	    Log.d(TAG, "2");
-        	    
-    	            // Reset out string buffer to zero and clear the edit text field
-    	            mOutStringBuffer.setLength(0);
-    	            mOutEditText.setText(mOutStringBuffer);
-    	   
-
-    		}
-    		else if (filesize >= 0 && filesize < packetsize) 
-    		{
-
-    	        Log.d(TAG, "4");
-
-    			byte[] imags = new byte[filesize];
-    			int count = filesize;
-    			for (int i = 0; i < count; i++)
-    			{
-    				try {
-						tp = dis.readByte();
-
-						imags[marker] = tp;
-						marker++;
-	    				filesize--;	
-	    				
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-	    	        Log.d(TAG, "5");	
-    			}
-    			if (imags.length > 0) {
-    	            //send file
-    	            mChatService.write(imags);
-
-        	        Log.d(TAG, "6");
-    	            // Reset out string buffer to zero and clear the edit text field
-    	            mOutStringBuffer.setLength(0);
-    	            mOutEditText.setText(mOutStringBuffer);
-    	        }
-
-    	        Log.d(TAG, "7");
-    		}
-    	}
+//    	while(filesize >= 0)
+//    	{
+//    		marker = 0;
+//    		if (filesize >= packetsize)
+//    		{
+//    			
+//    			for (int i = 0; i < packetsize; i++)
+//    			{
+//    				try {
+//						tp = dis.readByte();
+//						imag[marker] = tp;
+//						marker++;
+//	    				filesize--;	
+//					} catch (IOException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//
+//    			}
+//
+//    	            mChatService.write(imag);
+//
+//        	    Log.d(TAG, "2");
+//        	    
+//    	            // Reset out string buffer to zero and clear the edit text field
+//    	            mOutStringBuffer.setLength(0);
+//    	            mOutEditText.setText(mOutStringBuffer);
+//    	   
+//
+//    		}
+//    		else if (filesize >= 0 && filesize < packetsize) 
+//    		{
+//
+//    	        Log.d(TAG, "4");
+//
+//    			byte[] imags = new byte[filesize];
+//    			int count = filesize;
+//    			for (int i = 0; i < count; i++)
+//    			{
+//    				try {
+//						tp = dis.readByte();
+//
+//						imags[marker] = tp;
+//						marker++;
+//	    				filesize--;	
+//	    				
+//					} catch (IOException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//
+//	    	        Log.d(TAG, "5");	
+//    			}
+//    			if (imags.length > 0) {
+//    	            //send file
+//    	            mChatService.write(imags);
+//
+//        	        Log.d(TAG, "6");
+//    	            // Reset out string buffer to zero and clear the edit text field
+//    	            mOutStringBuffer.setLength(0);
+//    	            mOutEditText.setText(mOutStringBuffer);
+//    	        }
+//
+//    	        Log.d(TAG, "7");
+//    		}
+//    	}
 
         Log.d(TAG, "8");
 //		

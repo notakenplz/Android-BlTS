@@ -23,7 +23,6 @@ public final class R {
         public static final int p3=0x7f020009;
         public static final int p4=0x7f02000a;
         public static final int p5=0x7f02000b;
-        public static final int p6=0x7f02000c;
     }
     public static final class id {
         public static final int EditText01=0x7f06000a;

@@ -26,6 +26,21 @@
         android:transcriptMode="alwaysScroll"
         android:layout_weight="3"
     />
+		
+		<Gallery xmlns:android="http://schemas.android.com/apk/res/android" 
+	    android:id="@+id/gallerys"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	/>
+	
+	<ImageButton 
+	  android:id="@+id/image_button"  
+	  android:layout_width="fill_parent"
+	  android:layout_height="wrap_content"
+	  android:src="@drawable/b6"
+	  android:scaleType="centerInside"
+	  />
+	  
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
