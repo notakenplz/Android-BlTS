@@ -28,7 +28,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -38,28 +37,20 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Gallery;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 /**
  * This is the main Activity that displays the current chat session.
  */
-public class BluetoothChat extends Activity implements OnClickListener {
+public class BluetoothChat extends Activity {
     // Debugging
     private static final String TAG = "BluetoothChat";
     private static final boolean D = true;
@@ -102,58 +93,7 @@ public class BluetoothChat extends Activity implements OnClickListener {
     private byte[] F_SIZE = new byte[3];
     
     //hardcoded path to image file
-    private String file_name = "/mnt/sdcard/GIF/Untitled.gif";
-    private String base = "/mnt/sdcard/GIF/";
-    
-    //gallery stuff
-    
-    LinearLayout mLinearLayout;
-	int pos_temp = 0;
-
-	  private Integer[] mImageIds = {
-	          R.drawable.p1,
-	          R.drawable.p2,
-	          R.drawable.p3,
-	          R.drawable.p4,
-	          R.drawable.p5,
-	          R.drawable.p6
-	  };
-	
-    private Context mContext;
-	
-    public class ImageAdapter extends BaseAdapter {
-        int mGalleryItemBackground;
-
-        public ImageAdapter(Context c) {
-            mContext = c;
-            TypedArray a = c.obtainStyledAttributes(R.styleable.Gallery1);
-            mGalleryItemBackground = a.getResourceId(R.styleable.Gallery1_android_galleryItemBackground, 0);
-            a.recycle();
-        }
-        
-        public int getCount() {
-            return mImageIds.length;
-        }
-
-        public Object getItem(int position) {
-            return position;
-        }
-
-        public long getItemId(int position) {
-            return position;
-        }
-
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ImageView i = new ImageView(mContext);
-
-            i.setImageResource(mImageIds[position]);
-            i.setLayoutParams(new Gallery.LayoutParams(120, 100));
-            i.setScaleType(ImageView.ScaleType.FIT_XY);
-            i.setBackgroundResource(mGalleryItemBackground);
-
-            return i;
-        }
-    }
+    private String file_name = "/mnt/sdcard/GIF/p1.gif";
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -163,34 +103,12 @@ public class BluetoothChat extends Activity implements OnClickListener {
         F_HEADER[0] = 'a';
         F_HEADER[1] = 'b';
         F_HEADER[2] = 'c';
-
-               
+        
         // Set up the window layout
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.main);
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
 
-        
-      //setup gallery ui
-              mLinearLayout = new LinearLayout(this);
-              
-              Gallery g = (Gallery) findViewById(R.id.gallerys);
-              g.setAdapter(new ImageAdapter(this));
-
-              g.setOnItemClickListener(new OnItemClickListener() {
-                  public void onItemClick(AdapterView parent, View v, int position, long id) {
-                     //Toast.makeText(GalleryActivity.this, "" + position, Toast.LENGTH_SHORT).show();
-                      pos_temp = position;
-                      changeImage(position);
-                      
-                      mLinearLayout = new LinearLayout(mContext);
-//                      
-//                      Intent i = new Intent(mContext, BluetoothChat.class);
-//                      i.putExtra("image", pos_temp);
-//                      startActivity(i);
-                  }
-              });
-        
         // Set up the custom title
         mTitle = (TextView) findViewById(R.id.title_left_text);
         mTitle.setText(R.string.app_name);
@@ -198,8 +116,7 @@ public class BluetoothChat extends Activity implements OnClickListener {
 
         // Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        
-        
+
         // If the adapter is null, then Bluetooth is not supported
         if (mBluetoothAdapter == null) {
             Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
@@ -248,6 +165,7 @@ public class BluetoothChat extends Activity implements OnClickListener {
             return;
         }
 
+    	
     	DataInputStream dis;
     	File imagefile = new File(filename);
     	
@@ -274,13 +192,13 @@ public class BluetoothChat extends Activity implements OnClickListener {
         
 		int packetsize = 20;
         byte tp;
+
+		byte[] imag = new byte[packetsize];
     	while(filesize >= 0)
     	{
     		marker = 0;
     		if (filesize > packetsize)
     		{
-    			byte[] imag = new byte[packetsize];
-    			
     			
     			for (int i = 0; i < packetsize; i++)
     			{
@@ -316,14 +234,15 @@ public class BluetoothChat extends Activity implements OnClickListener {
     		{
 
     	        Log.d(TAG, "4");
-    			byte[] imag = new byte[packetsize];
-    			
+
+    			byte[] imags = new byte[packetsize];
     			int count = packetsize;
     			for (int i = 0; i < count; i++)
     			{
     				try {
 						tp = dis.readByte();
-						imag[marker] = tp;
+
+						imags[marker] = tp;
 						marker++;
 	    				filesize--;	
 					} catch (IOException e) {
@@ -402,25 +321,31 @@ public class BluetoothChat extends Activity implements OnClickListener {
     }
     private void setupChat() {
         Log.d(TAG, "setupChat()");
-//
-//        // Initialize the array adapter for the conversation thread
-//        mConversationArrayAdapter = new ArrayAdapter<String>(this, R.layout.message);
-////        mConversationView = (ListView) findViewById(R.id.in);
-////        mConversationView.setAdapter(mConversationArrayAdapter);
+
+        // Initialize the array adapter for the conversation thread
+        mConversationArrayAdapter = new ArrayAdapter<String>(this, R.layout.message);
+        mConversationView = (ListView) findViewById(R.id.in);
+        mConversationView.setAdapter(mConversationArrayAdapter);
 
         // Initialize the compose field with a listener for the return key
         mOutEditText = (EditText) findViewById(R.id.edit_text_out);
         mOutEditText.setOnEditorActionListener(mWriteListener);
 
+        // Initialize the send button with a listener that for click events
+        mSendButton = (Button) findViewById(R.id.button_send);
         // Initialize send file button
         mSendFButton = (Button) findViewById(R.id.button_send_image);
         
-        
-        ImageButton ib = (ImageButton) findViewById(R.id.sendI);
-        //ib.setOnClickListener(this);
-        
-        
-        ib.setOnClickListener(new OnClickListener() {
+        mSendButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                // Send a message using content of the edit text widget
+                TextView view = (TextView) findViewById(R.id.edit_text_out);
+                String message = view.getText().toString();
+                sendMessage(message);
+            }
+        });
+
+        mSendFButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 // Send a message using content of the edit text widget
                 TextView view = (TextView) findViewById(R.id.edit_text_out);
@@ -622,50 +547,4 @@ public class BluetoothChat extends Activity implements OnClickListener {
         }
         return false;
     }
-    
-    public void sendImage(View v)
-    {
-    	sendFile(file_name);
-//        Intent i = new Intent(this, BluetoothChat.class);
-//        i.putExtra("image", pos_temp);
-//        startActivity(i);
-    }
-    
-
-    public void changeImage(int res_id)
-    {
-    	ImageButton image = (ImageButton) findViewById(R.id.sendI);
-        image.setImageResource(mImageIds[res_id]);
-        
-        switch (res_id)
-        {
-        case 0:
-        	file_name = base + "p1.gif";
-        	break;
-        case 1:
-        	file_name = base + "p2.gif";
-        	break;
-        case 2:
-        	file_name = base + "p3.gif";
-        	break;
-        case 3:
-        	file_name = base + "p4.gif";
-        	break;
-        case 4:
-        	file_name = base + "p5.gif";
-        	break;
-        case 5:
-        	file_name = base + "p6.gif";
-        	break;
-        default:
-        	file_name = base + "p1.gif";
-        	break;
-        }
-        
-    }
-
-	public void onClick(View arg0) {
-		// TODO Auto-generated method stub
-		
-	}
 }

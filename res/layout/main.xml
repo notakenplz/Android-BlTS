@@ -19,21 +19,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-    
-<Gallery xmlns:android="http://schemas.android.com/apk/res/android" 
-    android:id="@+id/gallerys"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-/>
-<ImageButton
-		android:id="@+id/sendI"  
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_gravity="left"
-        android:onClick="sendImage"
-        android:src="@drawable/p6"
-        />
-        
+    <ListView android:id="@+id/in"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stackFromBottom="true"
+        android:transcriptMode="alwaysScroll"
+        android:layout_weight="3"
+    />
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"

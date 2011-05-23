@@ -5,17 +5,17 @@
   android:layout_height="fill_parent" android:orientation="vertical">
 
 <Gallery xmlns:android="http://schemas.android.com/apk/res/android" 
-    android:id="@+id/gallery2s"
+    android:id="@+id/gallerys"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
 />
-<ImageButton
-		android:id="@+id/sendIs"  
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_gravity="left"
-        android:onClick="sendImage"
-        android:src="@drawable/p6"
-        />
-        
+
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/view" android:text="@string/hello" android:textSize="18sp"></TextView>
+
+<ImageButton 
+  android:id="@+id/image_button"  
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:src="@drawable/p6"
+  />
 </LinearLayout>
