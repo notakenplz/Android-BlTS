@@ -194,10 +194,11 @@ public class BluetoothChat extends Activity {
         byte tp;
 
 		byte[] imag = new byte[packetsize];
+		
     	while(filesize >= 0)
     	{
     		marker = 0;
-    		if (filesize > packetsize)
+    		if (filesize >= packetsize)
     		{
     			
     			for (int i = 0; i < packetsize; i++)
@@ -214,9 +215,6 @@ public class BluetoothChat extends Activity {
 
     			}
 
-    	        Log.d(TAG, "1");
-    			if (imag.length > 0) {
-    	            //send file
     	            mChatService.write(imag);
 
         	    Log.d(TAG, "2");
@@ -224,19 +222,16 @@ public class BluetoothChat extends Activity {
     	            // Reset out string buffer to zero and clear the edit text field
     	            mOutStringBuffer.setLength(0);
     	            mOutEditText.setText(mOutStringBuffer);
-    	        
-
-        	        Log.d(TAG, "3");
-    			}
+    	   
 
     		}
-    		else
+    		else if (filesize >= 0 && filesize < packetsize) 
     		{
 
     	        Log.d(TAG, "4");
 
-    			byte[] imags = new byte[packetsize];
-    			int count = packetsize;
+    			byte[] imags = new byte[filesize];
+    			int count = filesize;
     			for (int i = 0; i < count; i++)
     			{
     				try {
@@ -245,6 +240,7 @@ public class BluetoothChat extends Activity {
 						imags[marker] = tp;
 						marker++;
 	    				filesize--;	
+	    				
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -252,9 +248,9 @@ public class BluetoothChat extends Activity {
 
 	    	        Log.d(TAG, "5");	
     			}
-    			if (imag.length > 0) {
+    			if (imags.length > 0) {
     	            //send file
-    	            mChatService.write(imag);
+    	            mChatService.write(imags);
 
         	        Log.d(TAG, "6");
     	            // Reset out string buffer to zero and clear the edit text field

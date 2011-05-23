@@ -26,14 +26,18 @@ public class GalleryActivity extends Activity implements OnClickListener{
     private Context mContext;
 
     private Integer[] mImageIds = {
-            R.drawable.p1,
-            R.drawable.p2,
-            R.drawable.p3,
-            R.drawable.p4,
-            R.drawable.p5,
-            R.drawable.p6,
+//            R.drawable.p1,
+//            R.drawable.p2,
+//            R.drawable.p3,
+//            R.drawable.p4,
+//            R.drawable.p5,
+//            R.drawable.p6,
             R.drawable.b1,
-            R.drawable.b2
+            R.drawable.b2,
+            R.drawable.b3,
+            R.drawable.b4,
+            R.drawable.b5,
+            R.drawable.b6
     };
     
     public void onCreate(Bundle savedInstanceState) {
