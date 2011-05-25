@@ -23,11 +23,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import com.example.android.BluetoothChat.GalleryActivity.ImageAdapter;
+
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -37,15 +40,23 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Gallery;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 /**
  * This is the main Activity that displays the current chat session.
@@ -95,6 +106,28 @@ public class BluetoothChat extends Activity {
     //hardcoded path to image file
     private String file_name = "/mnt/sdcard/GIF/b5.bmp";
     
+    //gallery shit
+	LinearLayout mLinearLayout;
+	int pos_temp = 0;
+
+    private Context mContext;
+
+    private Integer[] mImageIds = {
+//            R.drawable.p1,
+//            R.drawable.p2,
+//            R.drawable.p3,
+//            R.drawable.p4,
+//            R.drawable.p5,
+//            R.drawable.p6,
+            R.drawable.b1,
+            R.drawable.b2,
+            R.drawable.b3,
+            R.drawable.b4,
+            R.drawable.b5,
+            R.drawable.b6
+    };
+    
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,7 +155,21 @@ public class BluetoothChat extends Activity {
             Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
             finish();
             return;
+            
+            
         }
+
+        Gallery g = (Gallery) findViewById(R.id.gallery);
+        g.setAdapter(new ImageAdapter(this));
+
+        g.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(AdapterView parent, View v, int position, long id) {
+    
+                ImageButton image = (ImageButton) findViewById(R.id.image_button);
+                image.setImageResource(mImageIds[position]);
+            }
+        });
+        
     }
 
     @Override
@@ -165,7 +212,6 @@ public class BluetoothChat extends Activity {
             return;
         }
 
-    	
     	DataInputStream dis;
     	File imagefile = new File(filename);
     	
@@ -192,8 +238,8 @@ public class BluetoothChat extends Activity {
         
 		int packetsize = 20;
         byte tp;
-
-		//byte[] imag = new byte[packetsize];
+//
+//		byte[] imag = new byte[packetsize];
 		
         byte[] img = new byte[filesize];
         
@@ -221,8 +267,8 @@ public class BluetoothChat extends Activity {
         mOutStringBuffer.setLength(0);
         mOutEditText.setText(mOutStringBuffer);
     }
-
-//    	while(filesize >= 0)
+		
+//    	while(filesize > 0)
 //    	{
 //    		marker = 0;
 //    		if (filesize >= packetsize)
@@ -238,23 +284,21 @@ public class BluetoothChat extends Activity {
 //					} catch (IOException e) {
 //						// TODO Auto-generated catch block
 //						e.printStackTrace();
+//						System.exit(0);
 //					}
 //
 //    			}
 //
-//    	            mChatService.write(imag);
+//    	        mChatService.write(imag);
 //
 //        	    Log.d(TAG, "2");
 //        	    
 //    	            // Reset out string buffer to zero and clear the edit text field
 //    	            mOutStringBuffer.setLength(0);
 //    	            mOutEditText.setText(mOutStringBuffer);
-//    	   
-//
 //    		}
 //    		else if (filesize >= 0 && filesize < packetsize) 
 //    		{
-//
 //    	        Log.d(TAG, "4");
 //
 //    			byte[] imags = new byte[filesize];
@@ -271,6 +315,7 @@ public class BluetoothChat extends Activity {
 //					} catch (IOException e) {
 //						// TODO Auto-generated catch block
 //						e.printStackTrace();
+//						System.exit(0);
 //					}
 //
 //	    	        Log.d(TAG, "5");	
@@ -315,7 +360,7 @@ public class BluetoothChat extends Activity {
 //				if (marker == 6+filesize+500)
 //				{
 //					tmp = dis.readByte();
-////					img[marker] = tmp;
+//					img[marker] = tmp;
 //					img[marker] = 'B';
 //				}
 //				else
@@ -350,7 +395,7 @@ public class BluetoothChat extends Activity {
         mConversationView = (ListView) findViewById(R.id.in);
         mConversationView.setAdapter(mConversationArrayAdapter);
 
-        // Initialize the compose field with a listener for the return key
+         //Initialize the compose field with a listener for the return key
         mOutEditText = (EditText) findViewById(R.id.edit_text_out);
         mOutEditText.setOnEditorActionListener(mWriteListener);
 
@@ -445,17 +490,6 @@ public class BluetoothChat extends Activity {
             mOutEditText.setText(mOutStringBuffer);
         }
     }
-    
-    /*
-    private void sendFile(String file_path )
-    {
-   	    if (mChatService.getState() != BluetoothChatService.STATE_CONNECTED) {
-            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
-            return;
-        }
-		
-		
-    }*/
     
     // The action listener for the EditText widget, to listen for the return key
     private TextView.OnEditorActionListener mWriteListener =
@@ -570,4 +604,41 @@ public class BluetoothChat extends Activity {
         }
         return false;
     }
+    
+
+    public class ImageAdapter extends BaseAdapter {
+        int mGalleryItemBackground;
+
+
+        public ImageAdapter(Context c) {
+            mContext = c;
+            TypedArray a = c.obtainStyledAttributes(R.styleable.Gallery1);
+            mGalleryItemBackground = a.getResourceId(R.styleable.Gallery1_android_galleryItemBackground, 0);
+            a.recycle();
+        }
+        
+        public int getCount() {
+            return mImageIds.length;
+        }
+
+        public Object getItem(int position) {
+            return position;
+        }
+
+        public long getItemId(int position) {
+            return position;
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ImageView i = new ImageView(mContext);
+
+            i.setImageResource(mImageIds[position]);
+            i.setLayoutParams(new Gallery.LayoutParams(120, 100));
+            i.setScaleType(ImageView.ScaleType.FIT_XY);
+            i.setBackgroundResource(mGalleryItemBackground);
+
+            return i;
+        }
+    }
+
 }
