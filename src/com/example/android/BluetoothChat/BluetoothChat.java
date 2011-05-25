@@ -104,7 +104,7 @@ public class BluetoothChat extends Activity {
     private byte[] F_SIZE = new byte[3];
     
     //hardcoded path to image file
-    private String file_name = "/mnt/sdcard/GIF/b5.bmp";
+    private String file_name = "/mnt/sdcard/GIF/b6.bmp";
     
     //gallery shit
 	LinearLayout mLinearLayout;
@@ -113,12 +113,6 @@ public class BluetoothChat extends Activity {
     private Context mContext;
 
     private Integer[] mImageIds = {
-//            R.drawable.p1,
-//            R.drawable.p2,
-//            R.drawable.p3,
-//            R.drawable.p4,
-//            R.drawable.p5,
-//            R.drawable.p6,
             R.drawable.b1,
             R.drawable.b2,
             R.drawable.b3,
@@ -167,6 +161,7 @@ public class BluetoothChat extends Activity {
     
                 ImageButton image = (ImageButton) findViewById(R.id.image_button);
                 image.setImageResource(mImageIds[position]);
+                selectImagePath(position);
             }
         });
         
@@ -403,6 +398,8 @@ public class BluetoothChat extends Activity {
         mSendButton = (Button) findViewById(R.id.button_send);
         // Initialize send file button
         mSendFButton = (Button) findViewById(R.id.button_send_image);
+		// init image button
+        ImageButton image = (ImageButton) findViewById(R.id.image_button);
         
         mSendButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -416,7 +413,6 @@ public class BluetoothChat extends Activity {
         mSendFButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 // Send a message using content of the edit text widget
-                TextView view = (TextView) findViewById(R.id.edit_text_out);
                 //String message = view.getText().toString();
                 //sendMessage(message);
                 sendFile(file_name);
@@ -430,6 +426,24 @@ public class BluetoothChat extends Activity {
                 //toast.show();
             }
         });
+        
+        image.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                // Send a message using content of the edit text widget
+                //String message = view.getText().toString();
+                //sendMessage(message);
+                sendFile(file_name);
+                //toast file size
+                //message = Long.toString(sendFile(file_name));
+                //Context context = getApplicationContext();
+                
+                //CharSequence text = message;
+                //int duration = Toast.LENGTH_LONG;
+                //Toast toast = Toast.makeText(context, text, duration);
+                //toast.show();
+            }
+        });
+        
 
         // Initialize the BluetoothChatService to perform bluetooth connections
         mChatService = new BluetoothChatService(this, mHandler);
@@ -468,6 +482,34 @@ public class BluetoothChat extends Activity {
         }
     }
 
+    private void selectImagePath(int img)
+    {
+    	switch (img)
+    	{
+    	case 0:
+    		file_name = "/mnt/sdcard/GIF/b1.bmp";
+    		break;
+    	case 1:
+    		file_name = "/mnt/sdcard/GIF/b2.bmp";
+    		break;
+    	case 2:
+    		file_name = "/mnt/sdcard/GIF/b3.bmp";
+    		break;
+    	case 3:
+    		file_name = "/mnt/sdcard/GIF/b4.bmp";
+    		break;
+    	case 4:
+    		file_name = "/mnt/sdcard/GIF/b5.bmp";
+    		break;
+    	case 5:
+    		file_name = "/mnt/sdcard/GIF/b6.bmp";
+    		break;
+    	default:
+    		Toast.makeText(this, "File does not exist", Toast.LENGTH_SHORT).show();
+    		break;
+    	}
+    }
+    
     /**
      * Sends a message.
      * @param message  A string of text to send.
