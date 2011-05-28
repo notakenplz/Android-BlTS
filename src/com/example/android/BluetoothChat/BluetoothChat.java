@@ -21,7 +21,9 @@ import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 import com.example.android.BluetoothChat.GalleryActivity.ImageAdapter;
 
@@ -118,7 +120,9 @@ public class BluetoothChat extends Activity {
             R.drawable.b3,
             R.drawable.b4,
             R.drawable.b5,
-            R.drawable.b6
+            R.drawable.b6,
+    		R.drawable.b1_large,
+    		R.drawable.stripes
     };
     
     
@@ -130,6 +134,9 @@ public class BluetoothChat extends Activity {
         F_HEADER[0] = 'a';
         F_HEADER[1] = 'b';
         F_HEADER[2] = 'c';
+        
+        
+        
         
         // Set up the window layout
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
@@ -149,8 +156,6 @@ public class BluetoothChat extends Activity {
             Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
             finish();
             return;
-            
-            
         }
 
         Gallery g = (Gallery) findViewById(R.id.gallery);
@@ -162,8 +167,12 @@ public class BluetoothChat extends Activity {
                 ImageButton image = (ImageButton) findViewById(R.id.image_button);
                 image.setImageResource(mImageIds[position]);
                 selectImagePath(position);
+
+                Context ctx = getApplicationContext();
+                Toast.makeText(ctx, Integer.toString(position), Toast.LENGTH_LONG).show();     
             }
         });
+        
         
     }
 
@@ -209,6 +218,9 @@ public class BluetoothChat extends Activity {
 
     	DataInputStream dis;
     	File imagefile = new File(filename);
+    	FileOutputStream fOut = null;
+    	OutputStreamWriter osw = null;
+ 
     	
     	int marker = 0;
     	int filesize = (int) imagefile.length();
@@ -231,21 +243,47 @@ public class BluetoothChat extends Activity {
 			dis = null;
 		}
         
-		int packetsize = 20;
+		int packetsize = 1024;
         byte tp;
 //
 //		byte[] imag = new byte[packetsize];
-		
+        
         byte[] img = new byte[filesize];
         
+//        byte[] alpha = {'a','b','c','d','e','f',
+//        			    'g','h','i','j','k','l','m',
+//        			    'n','o','p','q','r','s','t',
+//        			    'u','v','w','x','y','z'};
+//        
+//        int cur_alpha = 0;
+        
+        int cur_byte=0;
+        
+        //skip bitmap header
+        
+        try {
+			dis.skipBytes(54);
+			filesize = filesize - 54;
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		for (int i = 0; i < filesize; i++)
 		{
+//			tp = alpha[cur_alpha];
+//			img[marker] = tp;
+//			marker++;
+//			if (cur_alpha == 25)
+//			{
+//				cur_alpha = 0; 
+//			}
+//			else
+//				cur_alpha++;
+//			
 			try {
-				tp = dis.readByte();
-
+				tp = dis.readByte();	
 				img[marker] = tp;
 				marker++;
-				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -504,6 +542,12 @@ public class BluetoothChat extends Activity {
     	case 5:
     		file_name = "/mnt/sdcard/GIF/b6.bmp";
     		break;
+    	case 6:
+    		file_name = "/mnt/sdcard/GIF/b1_large.bmp";
+    		break;
+    	case 7:
+    		file_name = "mnt/sdcard/GIF/stripes.bmp";
+    		break;
     	default:
     		Toast.makeText(this, "File does not exist", Toast.LENGTH_SHORT).show();
     		break;
@@ -547,6 +591,8 @@ public class BluetoothChat extends Activity {
         }
     };
 
+    
+    
     // The Handler that gets information back from the BluetoothChatService
     private final Handler mHandler = new Handler() {
         @Override
@@ -647,7 +693,9 @@ public class BluetoothChat extends Activity {
         return false;
     }
     
-
+    
+//    private class SendImageTask
+    
     public class ImageAdapter extends BaseAdapter {
         int mGalleryItemBackground;
 

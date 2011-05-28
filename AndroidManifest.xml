@@ -32,8 +32,7 @@
         </activity>
         <activity android:name=".DeviceListActivity"
                   android:label="@string/select_device"
-                  android:theme="@android:style/Theme.Dialog"
-                  android:configChanges="orientation|keyboardHidden" />
+                  android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".GalleryActivity"
                   android:configChanges="orientation|keyboardHidden"> 
 
