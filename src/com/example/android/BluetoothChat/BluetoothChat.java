@@ -33,6 +33,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -167,9 +168,6 @@ public class BluetoothChat extends Activity {
                 ImageButton image = (ImageButton) findViewById(R.id.image_button);
                 image.setImageResource(mImageIds[position]);
                 selectImagePath(position);
-
-                Context ctx = getApplicationContext();
-                Toast.makeText(ctx, Integer.toString(position), Toast.LENGTH_LONG).show();     
             }
         });
         
@@ -453,7 +451,11 @@ public class BluetoothChat extends Activity {
                 // Send a message using content of the edit text widget
                 //String message = view.getText().toString();
                 //sendMessage(message);
-                sendFile(file_name);
+            	SendImageTask s = new SendImageTask();
+            	int a = s.doInBackground("");
+            	s.onPostExecute(a);
+            	
+                //sendFile(file_name);
                 //toast file size
                 //message = Long.toString(sendFile(file_name));
                 //Context context = getApplicationContext();
@@ -695,7 +697,23 @@ public class BluetoothChat extends Activity {
     
     
 //    private class SendImageTask
-    
+
+
+    private class SendImageTask extends AsyncTask<String, Void, Integer> {
+         
+    	 int count = 0;
+    	 protected Integer doInBackground(String... urls) {
+             for (int i = 0;i < 1000000; i++)
+            	 count++;
+             return count;
+         }
+
+         protected void onPostExecute(int count) {
+
+        	 Context c = getApplicationContext();
+             Toast.makeText(c, Integer.toString(count), Toast.LENGTH_LONG).show();
+         }
+     }
     public class ImageAdapter extends BaseAdapter {
         int mGalleryItemBackground;
 
