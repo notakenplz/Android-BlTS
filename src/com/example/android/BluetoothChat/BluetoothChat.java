@@ -28,6 +28,7 @@ import java.io.OutputStreamWriter;
 import com.example.android.BluetoothChat.GalleryActivity.ImageAdapter;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -123,10 +124,20 @@ public class BluetoothChat extends Activity {
             R.drawable.b5,
             R.drawable.b6,
     		R.drawable.b1_large,
-    		R.drawable.stripes
+    		R.drawable.stripes,
+    		R.drawable.b2small,
+    		R.drawable.b3small,
+    		R.drawable.bls
     };
     
     
+    //thread shit and progress bar shit
+    
+     int max = 10000000;
+	 int count = 0;
+	 ProgressDialog dialog;
+	 int increment;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,6 +179,20 @@ public class BluetoothChat extends Activity {
                 ImageButton image = (ImageButton) findViewById(R.id.image_button);
                 image.setImageResource(mImageIds[position]);
                 selectImagePath(position);
+            	
+//            	Context c = getApplicationContext();
+//                dialog = new ProgressDialog(c);
+//                dialog.setCancelable(true);
+//                dialog.setMessage("Sending...");
+//               //  set the progress to be horizontal
+//                dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+//                // reset the bar to the default value of 0
+//                dialog.setProgress(0);
+//         
+//                dialog.setMax(max);
+//                // display the progressbar
+//                dialog.show();
+                
             }
         });
         
@@ -219,29 +244,29 @@ public class BluetoothChat extends Activity {
     	FileOutputStream fOut = null;
     	OutputStreamWriter osw = null;
  
-    	
+    	dis = null;
     	int marker = 0;
     	int filesize = (int) imagefile.length();
-    	
-    	String message;
-        message = Integer.toString(filesize);
-        
-        Context context = getApplicationContext();
-        
-        CharSequence text = message;
-        int duration = Toast.LENGTH_LONG;
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
     	
 
     	try {
 			dis = new DataInputStream(new FileInputStream(imagefile));
+			dis.skipBytes(54);
+			filesize = (filesize - 54);
 		}
 		catch(FileNotFoundException e) {
 			dis = null;
+			System.exit(-1);
 		}
+        catch (IOException e)
+        {
+        	System.exit(-1);
+        }
         
-		int packetsize = 1024;
+
+		Toast.makeText(this, Integer.toString(filesize), Toast.LENGTH_SHORT).show();
+		
+//		int packetsize = 1024;
         byte tp;
 //
 //		byte[] imag = new byte[packetsize];
@@ -256,16 +281,10 @@ public class BluetoothChat extends Activity {
 //        int cur_alpha = 0;
         
         int cur_byte=0;
+
         
-        //skip bitmap header
-        
-        try {
-			dis.skipBytes(54);
-			filesize = filesize - 54;
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+   
+
 		for (int i = 0; i < filesize; i++)
 		{
 //			tp = alpha[cur_alpha];
@@ -299,6 +318,7 @@ public class BluetoothChat extends Activity {
         mOutEditText.setText(mOutStringBuffer);
     }
 		
+		img = null;
 //    	while(filesize > 0)
 //    	{
 //    		marker = 0;
@@ -418,6 +438,7 @@ public class BluetoothChat extends Activity {
 //            mOutEditText.setText(mOutStringBuffer);
 //        }
     }
+    
     private void setupChat() {
         Log.d(TAG, "setupChat()");
 
@@ -448,23 +469,55 @@ public class BluetoothChat extends Activity {
 
         mSendFButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                // Send a message using content of the edit text widget
-                //String message = view.getText().toString();
-                //sendMessage(message);
-            	SendImageTask s = new SendImageTask();
-            	int a = s.doInBackground("");
-            	s.onPostExecute(a);
             	
-                //sendFile(file_name);
-                //toast file size
-                //message = Long.toString(sendFile(file_name));
-                //Context context = getApplicationContext();
+//            	Context c = getApplicationContext();
+//                dialog = new ProgressDialog(c);
+//                dialog.setCancelable(true);
+//                dialog.setMessage("Sending...");
+//               //  set the progress to be horizontal
+//                dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+//                // reset the bar to the default value of 0
+//                dialog.setProgress(0);
+//         
+//                dialog.setMax(max);
+//                // display the progressbar
+//                dialog.show();
                 
-                //CharSequence text = message;
-                //int duration = Toast.LENGTH_LONG;
-                //Toast toast = Toast.makeText(context, text, duration);
-                //toast.show();
+//            	SendImageTask s = new SendImageTask();
+//            	int a = s.doInBackground("");
+//            	s.onPostExecute(count);
+//            	
+//                // create a thread for updating the progress bar
+//                Thread background = new Thread (new Runnable() {
+//                   public void run() {
+//                       try {
+//                           // enter the code to be run while displaying the progressbar.
+//                           //
+//                           // This example is just going to increment the progress bar:
+//                           // So keep running until the progress value reaches maximum value
+//                           while (dialog.getProgress()<= dialog.getMax()) {
+//                               // wait 500ms between each update
+//                               Thread.sleep(50);
+//         
+//                               // active the update handler
+//                               progressHandler.sendMessage(progressHandler.obtainMessage());
+//                           }
+//                       } catch (java.lang.InterruptedException e) {
+//                           // if something fails do something smart
+//                    	   System.exit(1);
+//                       }
+//                   }
+//                });
+//         
+//                // start the background thread
+//                background.start();
             }
+//            
+//            Handler progressHandler = new Handler() {
+//                public void handleMessage(Message msg) {
+//                    dialog.setProgress(count);
+//                }
+//            };
         });
         
         image.setOnClickListener(new OnClickListener() {
@@ -549,6 +602,15 @@ public class BluetoothChat extends Activity {
     		break;
     	case 7:
     		file_name = "mnt/sdcard/GIF/stripes.bmp";
+    		break;
+    	case 8:
+    		file_name = "mnt/sdcard/GIF/b2small.bmp";
+    		break;
+    	case 9:
+    		file_name = "mnt/sdcard/GIF/b3small.bmp";
+    		break;
+    	case 10:
+    		file_name = "mnt/sdcard/GIF/bls.bmp";
     		break;
     	default:
     		Toast.makeText(this, "File does not exist", Toast.LENGTH_SHORT).show();
@@ -700,8 +762,6 @@ public class BluetoothChat extends Activity {
 
 
     private class SendImageTask extends AsyncTask<String, Void, Integer> {
-         
-    	 int count = 0;
     	 protected Integer doInBackground(String... urls) {
              for (int i = 0;i < 1000000; i++)
             	 count++;
@@ -714,6 +774,8 @@ public class BluetoothChat extends Activity {
              Toast.makeText(c, Integer.toString(count), Toast.LENGTH_LONG).show();
          }
      }
+    
+    
     public class ImageAdapter extends BaseAdapter {
         int mGalleryItemBackground;
 
