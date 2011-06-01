@@ -143,11 +143,6 @@ public class BluetoothChat extends Activity {
         super.onCreate(savedInstanceState);
         if(D) Log.e(TAG, "+++ ON CREATE +++");
         
-        F_HEADER[0] = 'a';
-        F_HEADER[1] = 'b';
-        F_HEADER[2] = 'c';
-        
-        
         
         
         // Set up the window layout
@@ -169,7 +164,20 @@ public class BluetoothChat extends Activity {
             finish();
             return;
         }
-
+//
+//        
+//        dialog = new ProgressDialog(this);
+//        dialog.setCancelable(true);
+//        dialog.setMessage("Sending...");
+//       //  set the progress to be horizontal
+//        dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+//        // reset the bar to the default value of 0
+//        dialog.setProgress(0);
+// 
+//        dialog.setMax(max);
+//        // display the progressbar
+//        dialog.show();
+        
         Gallery g = (Gallery) findViewById(R.id.gallery);
         g.setAdapter(new ImageAdapter(this));
 
@@ -262,51 +270,72 @@ public class BluetoothChat extends Activity {
         {
         	System.exit(-1);
         }
-        
 
-		Toast.makeText(this, Integer.toString(filesize), Toast.LENGTH_SHORT).show();
-		
-//		int packetsize = 1024;
         byte tp;
 //
 //		byte[] imag = new byte[packetsize];
         
         byte[] img = new byte[filesize];
         
-//        byte[] alpha = {'a','b','c','d','e','f',
-//        			    'g','h','i','j','k','l','m',
-//        			    'n','o','p','q','r','s','t',
-//        			    'u','v','w','x','y','z'};
-//        
-//        int cur_alpha = 0;
-        
         int cur_byte=0;
 
+//        
+//        int row = 1;
+//        marker = 272*3+1;
+//        int bpline = 272*3+1;
+//      
         
-   
+        int x = 272;
+        int y = 204;
+        
+        for (int i = 0; i < y; i++)
+        {
+        	marker = (x*3*(i+1))-1;
+        	for (int j = 0; j < x*3; j=j+3)
+        	{
+        		try {
+        			for (int k = 2; k >= 0; k--)
+        			{
+        				tp = dis.readByte();
+						img[marker-k] = tp;
+						
+					}
 
-		for (int i = 0; i < filesize; i++)
-		{
-//			tp = alpha[cur_alpha];
-//			img[marker] = tp;
-//			marker++;
-//			if (cur_alpha == 25)
-//			{
-//				cur_alpha = 0; 
-//			}
-//			else
-//				cur_alpha++;
+					marker = marker - 3 ;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					System.exit(-1);
+				}
+        	}
+        }
+        
+//		for (int i = 0; i < filesize; i++)
+//		{
 //			
-			try {
-				tp = dis.readByte();	
-				img[marker] = tp;
-				marker++;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.exit(0);
-			}
-		}
+//			try {
+//				tp = dis.readByte();	
+//				img[marker] = tp;
+//				Log.e(TAG,Integer.toString(marker));
+//				marker++;
+//				//marker--;
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//				System.exit(0);
+//			} 
+//			catch (ArrayIndexOutOfBoundsException a )
+//			{
+//				Log.e(TAG, Integer.toString(marker));
+//				System.exit(0);
+//			}
+//			
+//		    if (marker % bpline == 0)
+//		    {
+//		    	row = row + 1;
+//		    	marker = marker + (bpline-1) * row;
+//		    }	
+//		}
 		
 		if (img.length > 0) {
         //send file
