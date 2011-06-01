@@ -117,17 +117,19 @@ public class BluetoothChat extends Activity {
     private Context mContext;
 
     private Integer[] mImageIds = {
-            R.drawable.b1,
-            R.drawable.b2,
-            R.drawable.b3,
-            R.drawable.b4,
-            R.drawable.b5,
-            R.drawable.b6,
-    		R.drawable.b1_large,
-    		R.drawable.stripes,
+//            R.drawable.b1,
+//            R.drawable.b2,
+//            R.drawable.b3,
+//            R.drawable.b4,
+//            R.drawable.b5,
+//            R.drawable.b6,
+//    		R.drawable.b1_large,
+//    		R.drawable.stripes,
     		R.drawable.b2small,
     		R.drawable.b3small,
-    		R.drawable.bls
+    		R.drawable.bls,
+    		R.drawable.s1,
+    		R.drawable.s2
     };
     
     
@@ -142,8 +144,6 @@ public class BluetoothChat extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(D) Log.e(TAG, "+++ ON CREATE +++");
-        
-        
         
         // Set up the window layout
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
@@ -177,7 +177,7 @@ public class BluetoothChat extends Activity {
 //        dialog.setMax(max);
 //        // display the progressbar
 //        dialog.show();
-        
+//        
         Gallery g = (Gallery) findViewById(R.id.gallery);
         g.setAdapter(new ImageAdapter(this));
 
@@ -187,19 +187,19 @@ public class BluetoothChat extends Activity {
                 ImageButton image = (ImageButton) findViewById(R.id.image_button);
                 image.setImageResource(mImageIds[position]);
                 selectImagePath(position);
-            	
-//            	Context c = getApplicationContext();
-//                dialog = new ProgressDialog(c);
-//                dialog.setCancelable(true);
-//                dialog.setMessage("Sending...");
-//               //  set the progress to be horizontal
-//                dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-//                // reset the bar to the default value of 0
-//                dialog.setProgress(0);
-//         
-//                dialog.setMax(max);
-//                // display the progressbar
-//                dialog.show();
+//            	
+////            	Context c = getApplicationContext();
+////                dialog = new ProgressDialog(c);
+////                dialog.setCancelable(true);
+////                dialog.setMessage("Sending...");
+////               //  set the progress to be horizontal
+////                dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+////                // reset the bar to the default value of 0
+////                dialog.setProgress(0);
+////         
+////                dialog.setMax(max);
+////                // display the progressbar
+////                dialog.show();
                 
             }
         });
@@ -287,7 +287,25 @@ public class BluetoothChat extends Activity {
         
         int x = 272;
         int y = 204;
-        
+
+//        for (int i = 0; i < y; i++)
+//        {
+//        	marker = (x*3*(i+1))-1;
+//        	for (int j = 0; j < x*3; j++)
+//        	{
+//        		try {
+//					tp = dis.readByte();
+//	        		img[marker] = tp;
+//	        		marker--;
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//					System.exit(0);
+//				}
+//        	}
+//        }
+//        
+        int bytesSent = 0;
         for (int i = 0; i < y; i++)
         {
         	marker = (x*3*(i+1))-1;
@@ -298,7 +316,7 @@ public class BluetoothChat extends Activity {
         			{
         				tp = dis.readByte();
 						img[marker-k] = tp;
-						
+						bytesSent++;
 					}
 
 					marker = marker - 3 ;
@@ -346,7 +364,8 @@ public class BluetoothChat extends Activity {
         mOutStringBuffer.setLength(0);
         mOutEditText.setText(mOutStringBuffer);
     }
-		
+		Toast.makeText(this, Integer.toString(bytesSent), Toast.LENGTH_SHORT).show();
+		Log.e(TAG, Integer.toString(bytesSent));
 		img = null;
 //    	while(filesize > 0)
 //    	{
@@ -608,38 +627,44 @@ public class BluetoothChat extends Activity {
     {
     	switch (img)
     	{
+//    	case 0:
+//    		file_name = "/mnt/sdcard/GIF/b1.bmp";
+//    		break;
+//    	case 1:
+//    		file_name = "/mnt/sdcard/GIF/b2.bmp";
+//    		break;
+//    	case 2:
+//    		file_name = "/mnt/sdcard/GIF/b3.bmp";
+//    		break;
+//    	case 3:
+//    		file_name = "/mnt/sdcard/GIF/b4.bmp";
+//    		break;
+//    	case 4:
+//    		file_name = "/mnt/sdcard/GIF/b5.bmp";
+//    		break;
+//    	case 5:
+//    		file_name = "/mnt/sdcard/GIF/b6.bmp";
+//    		break;
+//    	case 6:
+//    		file_name = "/mnt/sdcard/GIF/b1_large.bmp";
+//    		break;
+//    	case 7:
+//    		file_name = "mnt/sdcard/GIF/stripes.bmp";
+//    		break;
     	case 0:
-    		file_name = "/mnt/sdcard/GIF/b1.bmp";
-    		break;
-    	case 1:
-    		file_name = "/mnt/sdcard/GIF/b2.bmp";
-    		break;
-    	case 2:
-    		file_name = "/mnt/sdcard/GIF/b3.bmp";
-    		break;
-    	case 3:
-    		file_name = "/mnt/sdcard/GIF/b4.bmp";
-    		break;
-    	case 4:
-    		file_name = "/mnt/sdcard/GIF/b5.bmp";
-    		break;
-    	case 5:
-    		file_name = "/mnt/sdcard/GIF/b6.bmp";
-    		break;
-    	case 6:
-    		file_name = "/mnt/sdcard/GIF/b1_large.bmp";
-    		break;
-    	case 7:
-    		file_name = "mnt/sdcard/GIF/stripes.bmp";
-    		break;
-    	case 8:
     		file_name = "mnt/sdcard/GIF/b2small.bmp";
     		break;
-    	case 9:
+    	case 1:
     		file_name = "mnt/sdcard/GIF/b3small.bmp";
     		break;
-    	case 10:
+    	case 2:
     		file_name = "mnt/sdcard/GIF/bls.bmp";
+    		break;
+    	case 3:
+    		file_name = "mnt/sdcard/GIF/s1.bmp";
+    		break;
+    	case 4:
+    		file_name = "mnt/sdcard/GIF/s2.bmp";
     		break;
     	default:
     		Toast.makeText(this, "File does not exist", Toast.LENGTH_SHORT).show();

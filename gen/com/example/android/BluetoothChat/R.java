@@ -27,7 +27,9 @@ public final class R {
         public static final int p3=0x7f02000d;
         public static final int p4=0x7f02000e;
         public static final int p5=0x7f02000f;
-        public static final int stripes=0x7f020010;
+        public static final int s1=0x7f020010;
+        public static final int s2=0x7f020011;
+        public static final int stripes=0x7f020012;
     }
     public static final class id {
         public static final int EditText01=0x7f06000b;
