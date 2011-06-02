@@ -361,8 +361,8 @@ public class BluetoothChat extends Activity {
 
         Log.d(TAG, "6");
         // Reset out string buffer to zero and clear the edit text field
-        mOutStringBuffer.setLength(0);
-        mOutEditText.setText(mOutStringBuffer);
+//        mOutStringBuffer.setLength(0);
+//        mOutEditText.setText(mOutStringBuffer);
     }
 		Toast.makeText(this, Integer.toString(bytesSent), Toast.LENGTH_SHORT).show();
 		Log.e(TAG, Integer.toString(bytesSent));
@@ -491,83 +491,83 @@ public class BluetoothChat extends Activity {
         Log.d(TAG, "setupChat()");
 
         // Initialize the array adapter for the conversation thread
-        mConversationArrayAdapter = new ArrayAdapter<String>(this, R.layout.message);
-        mConversationView = (ListView) findViewById(R.id.in);
-        mConversationView.setAdapter(mConversationArrayAdapter);
-
-         //Initialize the compose field with a listener for the return key
-        mOutEditText = (EditText) findViewById(R.id.edit_text_out);
-        mOutEditText.setOnEditorActionListener(mWriteListener);
+//        mConversationArrayAdapter = new ArrayAdapter<String>(this, R.layout.message);
+//        mConversationView = (ListView) findViewById(R.id.in);
+//        mConversationView.setAdapter(mConversationArrayAdapter);
+//
+//         //Initialize the compose field with a listener for the return key
+//        mOutEditText = (EditText) findViewById(R.id.edit_text_out);
+//        mOutEditText.setOnEditorActionListener(mWriteListener);
 
         // Initialize the send button with a listener that for click events
-        mSendButton = (Button) findViewById(R.id.button_send);
-        // Initialize send file button
-        mSendFButton = (Button) findViewById(R.id.button_send_image);
-		// init image button
+//        mSendButton = (Button) findViewById(R.id.button_send);
+//        // Initialize send file button
+//        mSendFButton = (Button) findViewById(R.id.button_send_image);
+//		// init image button
         ImageButton image = (ImageButton) findViewById(R.id.image_button);
-        
-        mSendButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                // Send a message using content of the edit text widget
-                TextView view = (TextView) findViewById(R.id.edit_text_out);
-                String message = view.getText().toString();
-                sendMessage(message);
-            }
-        });
-
-        mSendFButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-            	
-//            	Context c = getApplicationContext();
-//                dialog = new ProgressDialog(c);
-//                dialog.setCancelable(true);
-//                dialog.setMessage("Sending...");
-//               //  set the progress to be horizontal
-//                dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-//                // reset the bar to the default value of 0
-//                dialog.setProgress(0);
-//         
-//                dialog.setMax(max);
-//                // display the progressbar
-//                dialog.show();
-                
-//            	SendImageTask s = new SendImageTask();
-//            	int a = s.doInBackground("");
-//            	s.onPostExecute(count);
+//        
+//        mSendButton.setOnClickListener(new OnClickListener() {
+//            public void onClick(View v) {
+//                // Send a message using content of the edit text widget
+//                TextView view = (TextView) findViewById(R.id.edit_text_out);
+//                String message = view.getText().toString();
+//                sendMessage(message);
+//            }
+//        });
+//
+//        mSendFButton.setOnClickListener(new OnClickListener() {
+//            public void onClick(View v) {
 //            	
-//                // create a thread for updating the progress bar
-//                Thread background = new Thread (new Runnable() {
-//                   public void run() {
-//                       try {
-//                           // enter the code to be run while displaying the progressbar.
-//                           //
-//                           // This example is just going to increment the progress bar:
-//                           // So keep running until the progress value reaches maximum value
-//                           while (dialog.getProgress()<= dialog.getMax()) {
-//                               // wait 500ms between each update
-//                               Thread.sleep(50);
-//         
-//                               // active the update handler
-//                               progressHandler.sendMessage(progressHandler.obtainMessage());
-//                           }
-//                       } catch (java.lang.InterruptedException e) {
-//                           // if something fails do something smart
-//                    	   System.exit(1);
-//                       }
-//                   }
-//                });
-//         
-//                // start the background thread
-//                background.start();
-            }
-//            
-//            Handler progressHandler = new Handler() {
-//                public void handleMessage(Message msg) {
-//                    dialog.setProgress(count);
-//                }
-//            };
-        });
-        
+////            	Context c = getApplicationContext();
+////                dialog = new ProgressDialog(c);
+////                dialog.setCancelable(true);
+////                dialog.setMessage("Sending...");
+////               //  set the progress to be horizontal
+////                dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+////                // reset the bar to the default value of 0
+////                dialog.setProgress(0);
+////         
+////                dialog.setMax(max);
+////                // display the progressbar
+////                dialog.show();
+//                
+////            	SendImageTask s = new SendImageTask();
+////            	int a = s.doInBackground("");
+////            	s.onPostExecute(count);
+////            	
+////                // create a thread for updating the progress bar
+////                Thread background = new Thread (new Runnable() {
+////                   public void run() {
+////                       try {
+////                           // enter the code to be run while displaying the progressbar.
+////                           //
+////                           // This example is just going to increment the progress bar:
+////                           // So keep running until the progress value reaches maximum value
+////                           while (dialog.getProgress()<= dialog.getMax()) {
+////                               // wait 500ms between each update
+////                               Thread.sleep(50);
+////         
+////                               // active the update handler
+////                               progressHandler.sendMessage(progressHandler.obtainMessage());
+////                           }
+////                       } catch (java.lang.InterruptedException e) {
+////                           // if something fails do something smart
+////                    	   System.exit(1);
+////                       }
+////                   }
+////                });
+////         
+////                // start the background thread
+////                background.start();
+//            }
+////            
+////            Handler progressHandler = new Handler() {
+////                public void handleMessage(Message msg) {
+////                    dialog.setProgress(count);
+////                }
+////            };
+//        });
+//        
         image.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 // Send a message using content of the edit text widget
@@ -590,7 +590,7 @@ public class BluetoothChat extends Activity {
         mChatService = new BluetoothChatService(this, mHandler);
 
         // Initialize the buffer for outgoing messages
-        mOutStringBuffer = new StringBuffer("");
+        //mOutStringBuffer = new StringBuffer("");
     }
 
     @Override
@@ -675,39 +675,39 @@ public class BluetoothChat extends Activity {
     /**
      * Sends a message.
      * @param message  A string of text to send.
-     */
-    private void sendMessage(String message) {
-        // Check that we're actually connected before trying anything
-        if (mChatService.getState() != BluetoothChatService.STATE_CONNECTED) {
-            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Check that there's actually something to send
-        if (message.length() > 0) {
-            // Get the message bytes and tell the BluetoothChatService to write
-            byte[] send = message.getBytes();
-            mChatService.write(send);
-
-            // Reset out string buffer to zero and clear the edit text field
-            mOutStringBuffer.setLength(0);
-            mOutEditText.setText(mOutStringBuffer);
-        }
-    }
+//     */
+//    private void sendMessage(String message) {
+//        // Check that we're actually connected before trying anything
+//        if (mChatService.getState() != BluetoothChatService.STATE_CONNECTED) {
+//            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        // Check that there's actually something to send
+//        if (message.length() > 0) {
+//            // Get the message bytes and tell the BluetoothChatService to write
+//            byte[] send = message.getBytes();
+//            mChatService.write(send);
+//
+//            // Reset out string buffer to zero and clear the edit text field
+//            mOutStringBuffer.setLength(0);
+//            mOutEditText.setText(mOutStringBuffer);
+//        }
+//    }
     
-    // The action listener for the EditText widget, to listen for the return key
-    private TextView.OnEditorActionListener mWriteListener =
-        new TextView.OnEditorActionListener() {
-        public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
-            // If the action is a key-up event on the return key, send the message
-            if (actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_UP) {
-                String message = view.getText().toString();
-                sendMessage(message);
-            }
-            if(D) Log.i(TAG, "END onEditorAction");
-            return true;
-        }
-    };
+//    // The action listener for the EditText widget, to listen for the return key
+//    private TextView.OnEditorActionListener mWriteListener =
+//        new TextView.OnEditorActionListener() {
+//        public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
+//            // If the action is a key-up event on the return key, send the message
+//            if (actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_UP) {
+//                String message = view.getText().toString();
+//                sendMessage(message);
+//            }
+//            if(D) Log.i(TAG, "END onEditorAction");
+//            return true;
+//        }
+//    };
 
     
     
@@ -722,7 +722,7 @@ public class BluetoothChat extends Activity {
                 case BluetoothChatService.STATE_CONNECTED:
                     mTitle.setText(R.string.title_connected_to);
                     mTitle.append(mConnectedDeviceName);
-                    mConversationArrayAdapter.clear();
+                    //mConversationArrayAdapter.clear();
                     break;
                 case BluetoothChatService.STATE_CONNECTING:
                     mTitle.setText(R.string.title_connecting);
@@ -737,13 +737,13 @@ public class BluetoothChat extends Activity {
                 byte[] writeBuf = (byte[]) msg.obj;
                 // construct a string from the buffer
                 String writeMessage = new String(writeBuf);
-                mConversationArrayAdapter.add("Me:  " + writeMessage);
+                //mConversationArrayAdapter.add("Me:  " + writeMessage);
                 break;
             case MESSAGE_READ:
                 byte[] readBuf = (byte[]) msg.obj;
                 // construct a string from the valid bytes in the buffer
                 String readMessage = new String(readBuf, 0, msg.arg1);
-                mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
+                //mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
                 break;
             case MESSAGE_DEVICE_NAME:
                 // save the connected device's name
